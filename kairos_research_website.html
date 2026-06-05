@@ -1,0 +1,571 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --k-bg:#04080f;
+  --k-surface:#0a1628;
+  --k-surface2:#0f1f3d;
+  --k-gold:#c9a84c;
+  --k-gold2:#e8c97a;
+  --k-blue:#1a3a6b;
+  --k-blue2:#2a5298;
+  --k-text:#e8eaf0;
+  --k-muted:#7a8aaa;
+  --k-border:#1e3050;
+  --k-danger:#c0392b;
+  --k-warn:#d68910;
+  --k-ok:#1a7a4a;
+}
+body{background:var(--k-bg);color:var(--k-text);font-family:var(--font-sans,'Inter',sans-serif);font-size:15px;line-height:1.6}
+nav{position:sticky;top:0;z-index:100;background:rgba(4,8,15,0.95);border-bottom:1px solid var(--k-border);padding:0 2rem;display:flex;align-items:center;gap:0;backdrop-filter:blur(8px)}
+.nav-brand{color:var(--k-gold);font-size:17px;font-weight:500;padding:1rem 1.5rem 1rem 0;border-right:1px solid var(--k-border);margin-right:1rem;white-space:nowrap}
+.nav-links{display:flex;gap:0;overflow-x:auto;scrollbar-width:none}
+.nav-links a{color:var(--k-muted);text-decoration:none;font-size:13px;padding:1rem 0.9rem;white-space:nowrap;border-bottom:2px solid transparent;transition:color 0.2s,border-color 0.2s}
+.nav-links a:hover,.nav-links a.active{color:var(--k-gold);border-bottom-color:var(--k-gold)}
+section{max-width:960px;margin:0 auto;padding:3rem 2rem}
+.section-label{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--k-gold);margin-bottom:0.5rem}
+h2{font-size:26px;font-weight:500;color:var(--k-gold2);margin-bottom:0.4rem}
+h3{font-size:16px;font-weight:500;color:var(--k-gold);margin:2rem 0 0.8rem}
+.divider{height:1px;background:var(--k-border);margin:0}
+.hero{background:linear-gradient(160deg,#0a1628 0%,#04080f 60%);border-bottom:1px solid var(--k-border);padding:5rem 2rem 4rem;text-align:center}
+.hero-title{font-size:48px;font-weight:500;color:var(--k-gold2);letter-spacing:2px;margin-bottom:0.5rem}
+.hero-sub{color:var(--k-muted);font-size:16px;margin-bottom:2rem}
+.hero-stats{display:flex;justify-content:center;gap:2rem;flex-wrap:wrap;margin-top:2rem}
+.hstat{background:var(--k-surface);border:1px solid var(--k-border);border-radius:10px;padding:1rem 1.5rem;min-width:130px;text-align:center}
+.hstat-val{font-size:22px;font-weight:500;color:var(--k-gold2)}
+.hstat-lbl{font-size:11px;color:var(--k-muted);margin-top:2px}
+.dash-table{width:100%;border-collapse:collapse;font-size:13px;margin-top:0.5rem}
+.dash-table th{background:var(--k-surface2);color:var(--k-gold);font-weight:500;padding:10px 14px;text-align:left;border-bottom:1px solid var(--k-border);font-size:11px;letter-spacing:1px;text-transform:uppercase}
+.dash-table td{padding:9px 14px;border-bottom:1px solid var(--k-border);color:var(--k-text);vertical-align:top}
+.dash-table tr:last-child td{border-bottom:none}
+.dash-table tr:hover td{background:rgba(255,255,255,0.02)}
+.badge{display:inline-block;padding:2px 10px;border-radius:20px;font-size:11px;font-weight:500}
+.badge-critical{background:rgba(192,57,43,0.2);color:#e74c3c;border:1px solid rgba(231,76,60,0.3)}
+.badge-high{background:rgba(214,137,16,0.2);color:#e8a120;border:1px solid rgba(232,161,32,0.3)}
+.badge-med{background:rgba(26,122,74,0.2);color:#2ecc71;border:1px solid rgba(46,204,113,0.3)}
+.card{background:var(--k-surface);border:1px solid var(--k-border);border-radius:12px;padding:1.5rem;margin-top:1rem}
+.card-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1rem;margin-top:1rem}
+.bullet-list{list-style:none;padding:0}
+.bullet-list li{padding:5px 0 5px 1.2rem;position:relative;color:var(--k-text);font-size:14px}
+.bullet-list li::before{content:'▸';position:absolute;left:0;color:var(--k-gold);font-size:11px;top:7px}
+.element-card{background:var(--k-surface2);border:2px solid var(--k-gold);border-radius:12px;padding:1.5rem;max-width:300px;position:relative;overflow:hidden}
+.element-card::before{content:'';position:absolute;top:-30px;right:-30px;width:100px;height:100px;border-radius:50%;background:rgba(201,168,76,0.08)}
+.el-number{font-size:13px;color:var(--k-gold);font-weight:500}
+.el-symbol{font-size:64px;font-weight:500;color:var(--k-gold2);line-height:1;margin:0.2rem 0}
+.el-name{font-size:18px;color:var(--k-text);margin-bottom:0.3rem}
+.el-weight{font-size:13px;color:var(--k-muted)}
+.el-glow{display:inline-block;background:rgba(100,160,255,0.15);border:1px solid rgba(100,160,255,0.3);color:#7ab8ff;border-radius:6px;padding:4px 10px;font-size:12px;margin-top:0.5rem}
+.el-props{margin-top:1rem;border-top:1px solid var(--k-border);padding-top:1rem;display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.el-prop-lbl{font-size:11px;color:var(--k-muted)}
+.el-prop-val{font-size:13px;color:var(--k-text);font-weight:500}
+.timeline{position:relative;margin-top:1rem;padding-left:2rem}
+.timeline::before{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;background:var(--k-border)}
+.tstep{position:relative;margin-bottom:2rem}
+.tstep::before{content:'';position:absolute;left:-2.4rem;top:4px;width:12px;height:12px;border-radius:50%;background:var(--k-gold);border:2px solid var(--k-bg)}
+.tstep-label{font-size:11px;color:var(--k-gold);text-transform:uppercase;letter-spacing:1px}
+.tstep-title{font-size:15px;font-weight:500;color:var(--k-gold2);margin:2px 0 6px}
+.sim-panel{background:var(--k-surface);border:1px solid var(--k-border);border-radius:12px;padding:1.5rem;margin-top:1rem}
+.sim-row{display:flex;align-items:center;gap:12px;margin-bottom:1rem}
+.sim-label{font-size:13px;color:var(--k-muted);min-width:140px}
+.sim-slider{flex:1;accent-color:var(--k-gold)}
+.sim-val{font-size:14px;font-weight:500;color:var(--k-gold2);min-width:60px;text-align:right}
+.sim-output{background:var(--k-surface2);border:1px solid var(--k-border);border-radius:8px;padding:1rem;margin-top:0.5rem}
+.sim-stat{display:inline-block;margin-right:2rem}
+.sim-stat-val{font-size:20px;font-weight:500;color:var(--k-gold2)}
+.sim-stat-lbl{font-size:11px;color:var(--k-muted);display:block}
+.sim-warn{font-size:12px;margin-top:0.5rem;padding:6px 10px;border-radius:6px}
+.sim-warn.danger{background:rgba(192,57,43,0.15);color:#e74c3c;border:1px solid rgba(231,76,60,0.2)}
+.sim-warn.ok{background:rgba(26,122,74,0.15);color:#2ecc71;border:1px solid rgba(46,204,113,0.2)}
+.sim-warn.warn{background:rgba(214,137,16,0.15);color:#e8a120;border:1px solid rgba(232,161,32,0.2)}
+.process-table{width:100%;border-collapse:collapse;font-size:13px;margin-top:0.5rem}
+.process-table th{background:var(--k-surface2);color:var(--k-gold);font-weight:500;padding:8px 12px;text-align:left;border-bottom:1px solid var(--k-border);font-size:11px;text-transform:uppercase;letter-spacing:1px}
+.process-table td{padding:8px 12px;border-bottom:1px solid var(--k-border);color:var(--k-text);font-size:13px}
+.tag-exo{background:rgba(214,137,16,0.15);color:#e8a120;border:1px solid rgba(232,161,32,0.25);padding:2px 8px;border-radius:4px;font-size:11px}
+.tag-endo{background:rgba(42,82,152,0.2);color:#7ab8ff;border:1px solid rgba(122,184,255,0.25);padding:2px 8px;border-radius:4px;font-size:11px}
+.food-web{display:grid;grid-template-columns:repeat(3,1fr);gap:0.7rem;margin-top:1rem}
+.fw-stage{background:var(--k-surface2);border:1px solid var(--k-border);border-radius:8px;padding:0.8rem;text-align:center}
+.fw-stage-num{font-size:10px;color:var(--k-gold);text-transform:uppercase;letter-spacing:1px}
+.fw-stage-name{font-size:13px;font-weight:500;color:var(--k-text);margin:3px 0}
+.fw-stage-ex{font-size:11px;color:var(--k-muted)}
+.job-card{background:var(--k-surface);border:1px solid var(--k-gold);border-radius:12px;padding:1.5rem;margin-top:1rem}
+.job-title{font-size:20px;font-weight:500;color:var(--k-gold2)}
+.job-sub{font-size:13px;color:var(--k-muted);margin-bottom:1rem}
+.duty-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:0.8rem;margin-top:1rem}
+.duty{background:var(--k-surface2);border:1px solid var(--k-border);border-radius:8px;padding:0.8rem}
+.duty-area{font-size:11px;color:var(--k-gold);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px}
+.duty-desc{font-size:12px;color:var(--k-text)}
+footer{background:var(--k-surface);border-top:1px solid var(--k-border);text-align:center;padding:2rem;color:var(--k-muted);font-size:13px}
+</style>
+
+<h2 class="sr-only" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)">Kairos Planetary Research Document — full scientific assessment of the planet Kairos including hazards, terraforming, ecology, and the element Auralium</h2>
+
+<nav>
+  <div class="nav-brand">⬡ Kairos</div>
+  <div class="nav-links">
+    <a href="#hazards" class="active">Hazards</a>
+    <a href="#cooling">Cooling</a>
+    <a href="#aquifer">Aquifer</a>
+    <a href="#roadmap">Roadmap</a>
+    <a href="#auralium">Auralium</a>
+    <a href="#eclipse">Eclipse</a>
+    <a href="#astronomy">Astronomy</a>
+    <a href="#ecology">Ecology</a>
+    <a href="#stem">STEM Role</a>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="section-label">Planetary Research Document</div>
+  <div class="hero-title">KAIROS</div>
+  <div class="hero-sub">Terraforming Engineering Assessment — Phase 1 Analysis</div>
+  <div class="hero-stats">
+    <div class="hstat"><div class="hstat-val">210°C</div><div class="hstat-lbl">Surface Temp</div></div>
+    <div class="hstat"><div class="hstat-val">0.62g</div><div class="hstat-lbl">Gravity</div></div>
+    <div class="hstat"><div class="hstat-val">30% O₂</div><div class="hstat-lbl">Atmosphere</div></div>
+    <div class="hstat"><div class="hstat-val">25% CO₂</div><div class="hstat-lbl">Greenhouse Gas</div></div>
+    <div class="hstat"><div class="hstat-val">5% CO</div><div class="hstat-lbl">Toxic Gas</div></div>
+    <div class="hstat"><div class="hstat-val">High</div><div class="hstat-lbl">Pressure</div></div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- HAZARDS -->
+<section id="hazards">
+  <div class="section-label">Section 01</div>
+  <h2>Critical Immediate Hazards</h2>
+  <p style="color:var(--k-muted);font-size:14px;margin-bottom:1.5rem">Risk assessment of 30% O₂ and 5% CO at 210°C under high pressure.</p>
+
+  <table class="dash-table">
+    <thead><tr><th>Hazard</th><th>Mechanism</th><th>Real Analog</th><th>Risk</th></tr></thead>
+    <tbody>
+      <tr><td>30% Oxygen enrichment</td><td>Surfaces ignite without spark at 210°C; fires spread instantly</td><td>Apollo 1 cabin fire (100% O₂)</td><td><span class="badge badge-critical">Critical</span></td></tr>
+      <tr><td>High pressure amplification</td><td>Packs more O₂ per cubic metre, lowers ignition energy</td><td>Hyperbaric oxygen chamber fires</td><td><span class="badge badge-critical">Critical</span></td></tr>
+      <tr><td>CO explosive mixture</td><td>5% CO + 30% O₂ sits inside CO's explosive range (12.5–74%)</td><td>Coal mine gas explosions</td><td><span class="badge badge-critical">Critical</span></td></tr>
+      <tr><td>CO toxicity</td><td>5% CO = 42× the instantly lethal NIOSH limit of 1,200 ppm</td><td>NIOSH IDLH standards</td><td><span class="badge badge-critical">Critical</span></td></tr>
+      <tr><td>Metal oxide fires</td><td>High-temp O₂ reacts with iron in soil and structural metals</td><td>Iron wool burning in O₂ demo</td><td><span class="badge badge-high">High</span></td></tr>
+    </tbody>
+  </table>
+
+  <div class="card-grid" style="margin-top:1.5rem">
+    <div class="card">
+      <div style="font-size:13px;color:var(--k-gold);margin-bottom:0.5rem">Immediate Protocol</div>
+      <ul class="bullet-list">
+        <li>All surface ops require nitrogen-purged sealed enclosures</li>
+        <li>Personnel need closed-circuit rebreather systems (SCBA-class)</li>
+        <li>No open-element equipment of any kind on the surface</li>
+        <li>Catalytic CO converters must be deployed before first landing</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div style="font-size:13px;color:var(--k-gold);margin-bottom:0.5rem">Sources</div>
+      <ul class="bullet-list">
+        <li>OSHA 1910.146 — O₂-enriched atmospheres (&gt;23.5%)</li>
+        <li>CDC/NIOSH — Carbon monoxide IDLH standards</li>
+        <li>NASA — Fire safety in enriched oxygen environments</li>
+        <li>NFPA 720 — CO flammability data</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ATMOSPHERE SIMULATOR -->
+<section id="cooling">
+  <div class="section-label">Section 02</div>
+  <h2>Cooling & Carbon Management</h2>
+  <p style="color:var(--k-muted);font-size:14px;margin-bottom:1.5rem">Adjust the sliders to simulate atmospheric changes and temperature response.</p>
+
+  <div class="sim-panel">
+    <div style="font-size:13px;color:var(--k-gold);margin-bottom:1rem;font-weight:500">Atmosphere Simulator</div>
+    <div class="sim-row">
+      <span class="sim-label">CO₂ removed (%)</span>
+      <input type="range" class="sim-slider" min="0" max="25" value="0" step="1" id="co2removed">
+      <span class="sim-val" id="co2val">0%</span>
+    </div>
+    <div class="sim-row">
+      <span class="sim-label">Albedo coverage (%)</span>
+      <input type="range" class="sim-slider" min="0" max="100" value="0" step="1" id="albedo">
+      <span class="sim-val" id="albedoval">0%</span>
+    </div>
+    <div class="sim-row">
+      <span class="sim-label">Years elapsed</span>
+      <input type="range" class="sim-slider" min="0" max="50" value="0" step="1" id="years">
+      <span class="sim-val" id="yearsval">0 yrs</span>
+    </div>
+    <div class="sim-output" id="simout">
+      <span class="sim-stat"><span class="sim-stat-val" id="tempout">210°C</span><span class="sim-stat-lbl">Est. surface temp</span></span>
+      <span class="sim-stat"><span class="sim-stat-val" id="co2out">25%</span><span class="sim-stat-lbl">Remaining CO₂</span></span>
+      <span class="sim-stat"><span class="sim-stat-val" id="statusout">—</span><span class="sim-stat-lbl">Habitability</span></span>
+      <div class="sim-warn danger" id="simwarn">Surface is uninhabitable. Begin CO₂ sequestration and albedo enhancement.</div>
+    </div>
+  </div>
+
+  <h3>Sequestration Methods</h3>
+  <table class="dash-table">
+    <thead><tr><th>Method</th><th>How It Works</th><th>Real Analog</th><th>CO₂ Reduction</th></tr></thead>
+    <tbody>
+      <tr><td>Basalt rock injection</td><td>CO₂ pumped underground, mineralises into solid stone within 2 years</td><td>Carbfix Project, Iceland</td><td><span class="badge badge-med">High, permanent</span></td></tr>
+      <tr><td>Direct Air Capture (DAC)</td><td>Machines pull CO₂ from air using chemical sorbents</td><td>Climeworks, Switzerland</td><td><span class="badge badge-med">Controllable</span></td></tr>
+      <tr><td>Algae bioreactors</td><td>Thermophilic algae fix CO₂ at high temperatures</td><td>Yellowstone extremophile research</td><td><span class="badge badge-high">Medium, biological</span></td></tr>
+      <tr><td>Water-Gas Shift (CO→CO₂)</td><td>CO + H₂O → CO₂ + H₂ (removes CO, produces clean fuel)</td><td>Industrial standard (NREL)</td><td><span class="badge badge-med">Dual purpose</span></td></tr>
+      <tr><td>Albedo enhancement</td><td>Reflective silicate dust spread on hillsides bounces sunlight back to space</td><td>Govindasamy & Caldeira, 2000</td><td><span class="badge badge-high">Supports cooling</span></td></tr>
+    </tbody>
+  </table>
+</section>
+
+<div class="divider"></div>
+
+<!-- AQUIFER -->
+<section id="aquifer">
+  <div class="section-label">Section 03</div>
+  <h2>Aquifer Extraction</h2>
+  <p style="color:var(--k-muted);font-size:14px;margin-bottom:1.5rem">High surface pressure raises the boiling point of water — this is an engineering asset, not just a hazard.</p>
+
+  <table class="dash-table">
+    <thead><tr><th>Pressure Scenario</th><th>Water Boiling Point</th><th>Implication</th></tr></thead>
+    <tbody>
+      <tr><td>1 atm (Earth sea level)</td><td>100°C</td><td>Boils far below Kairos surface temp</td></tr>
+      <tr><td>~25 atm</td><td>~224°C</td><td>Water stays liquid at 210°C in sealed pipe</td></tr>
+      <tr><td>Underground (lithostatic)</td><td>&gt;300°C possible</td><td>Aquifer water already exists as superheated liquid</td></tr>
+    </tbody>
+  </table>
+
+  <div class="card-grid" style="margin-top:1.5rem">
+    <div class="card">
+      <div style="font-size:13px;color:var(--k-gold);margin-bottom:0.5rem">Sealed ESP Borehole</div>
+      <ul class="bullet-list">
+        <li>Drill to aquifer, cap with pressure-rated wellhead</li>
+        <li>Electric submersible pump keeps water pressurised throughout lift</li>
+        <li>Insulated pipeline delivers liquid water to base</li>
+        <li>Analog: SLB ESP systems (rated to 260°C)</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div style="font-size:13px;color:var(--k-gold);margin-bottom:0.5rem">Flash Evaporation Chamber</div>
+      <ul class="bullet-list">
+        <li>Pressurised water enters lower-pressure room</li>
+        <li>Controlled flash to steam, captured and condensed</li>
+        <li>Produces both clean water and electricity</li>
+        <li>Analog: Flash-steam geothermal plants (IEA)</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div style="font-size:13px;color:var(--k-gold);margin-bottom:0.5rem">Binary Cycle System</div>
+      <ul class="bullet-list">
+        <li>Hot water heats a second fluid with a lower boiling point</li>
+        <li>Second fluid spins a turbine — original water never meets open air</li>
+        <li>Protects water purity and generates power simultaneously</li>
+        <li>Analog: Organic Rankine Cycle (ORC) plants</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ROADMAP -->
+<section id="roadmap">
+  <div class="section-label">Section 04</div>
+  <h2>Phase 1 Scientific Roadmap</h2>
+  <div class="timeline" style="margin-top:1.5rem">
+    <div class="tstep">
+      <div class="tstep-label">Step 1 — Years 0–2</div>
+      <div class="tstep-title">Hazard Neutralisation</div>
+      <ul class="bullet-list">
+        <li>Remove CO using platinum-palladium catalytic converter beds</li>
+        <li>Dilute O₂ from 30% → 23% using N₂ from ammonia cracking</li>
+        <li>Build nitrogen-purged habitat modules with ceramic exteriors</li>
+        <li>Target: CO &lt; 0.1%, O₂ &lt; 23%, operational base</li>
+      </ul>
+    </div>
+    <div class="tstep">
+      <div class="tstep-label">Step 2 — Years 2–15</div>
+      <div class="tstep-title">Cooling Infrastructure</div>
+      <ul class="bullet-list">
+        <li>Basalt injection wells + DAC units begin CO₂ drawdown</li>
+        <li>Silicate dust dispersed over 500 km² of hillside terrain</li>
+        <li>3 ESP boreholes drilled — 10,000 L/day liquid water target</li>
+        <li>Target: CO₂ 25% → 15%, temperature down 20–30°C</li>
+      </ul>
+    </div>
+    <div class="tstep">
+      <div class="tstep-label">Step 3 — Years 15–40</div>
+      <div class="tstep-title">Atmospheric Stabilisation</div>
+      <ul class="bullet-list">
+        <li>Thermophilic cyanobacteria deployed in sealed bioreactors, then open terrain once &lt;150°C</li>
+        <li>N₂ from ammonia cracking fills volume vacated by CO₂ removal</li>
+        <li>First surface liquid water lakes form in cooled valley basins</li>
+        <li>Target: CO₂ &lt; 1%, N₂ 65–70%, O₂ 21%, first open lakes</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- AURALIUM -->
+<section id="auralium">
+  <div class="section-label">Section 05 — Newly Discovered Element</div>
+  <h2>Auralium (Aur)</h2>
+
+  <div style="display:flex;gap:2rem;flex-wrap:wrap;align-items:flex-start;margin-top:1rem">
+    <div class="element-card">
+      <div class="el-number">119</div>
+      <div class="el-symbol">Aur</div>
+      <div class="el-name">Auralium</div>
+      <div class="el-weight">299.47 u</div>
+      <div class="el-glow">Blue luminescence &gt;180°C</div>
+      <div class="el-props">
+        <div><div class="el-prop-lbl">Period</div><div class="el-prop-val">8</div></div>
+        <div><div class="el-prop-lbl">Group</div><div class="el-prop-val">6</div></div>
+        <div><div class="el-prop-lbl">Category</div><div class="el-prop-val">Transition metal</div></div>
+        <div><div class="el-prop-lbl">Valence e⁻</div><div class="el-prop-val">6</div></div>
+        <div><div class="el-prop-lbl">Total e⁻</div><div class="el-prop-val">119</div></div>
+        <div><div class="el-prop-lbl">Melt pt.</div><div class="el-prop-val">~850°C</div></div>
+        <div><div class="el-prop-lbl">Boil pt.</div><div class="el-prop-val">~3,200°C</div></div>
+        <div><div class="el-prop-lbl">Density</div><div class="el-prop-val">~24 g/cm³</div></div>
+      </div>
+    </div>
+
+    <div style="flex:1;min-width:260px">
+      <h3 style="margin-top:0">Physical Properties</h3>
+      <ul class="bullet-list">
+        <li>Deep gold solid with soft blue glow above 180°C — brightness indicates stored energy level</li>
+        <li>Stays solid on Kairos surface (melts at 850°C, surface is only 210°C)</li>
+        <li>Extremely hard and scratch-resistant — suitable for panels and structural alloys</li>
+        <li>Density ~24 g/cm³ comparable to osmium, the heaviest known Earth metal</li>
+        <li>Excellent thermal conductor — transfers heat efficiently into storage lattice</li>
+      </ul>
+
+      <h3>Chemical Properties</h3>
+      <ul class="bullet-list">
+        <li>Low reactivity — relativistic electron shielding prevents oxidation below 600°C</li>
+        <li>Oxidation states +2, +4, +6 — standard Group 6 behaviour</li>
+        <li>Acts as catalytic surface accelerating CO₂ breakdown at high temperatures</li>
+        <li>Hydrophobic — repels water, resists brine corrosion in aquifer pipelines</li>
+        <li>Inert to ammonia (NH₃) — safe alongside cracking systems</li>
+        <li>Alloys with iron and titanium to produce extreme heat-resistant construction metals</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3>Exothermic & Endothermic Processes</h3>
+  <table class="process-table">
+    <thead><tr><th>Process</th><th>Type</th><th>Trigger</th><th>Effect on Kairos</th><th>Real Analog</th></tr></thead>
+    <tbody>
+      <tr><td>Heat absorption into lattice</td><td><span class="tag-endo">Endothermic</span></td><td>Sun or 210°C ambient heat</td><td>Cools surface terrain, charges material</td><td>Phase-change materials (DOE)</td></tr>
+      <tr><td>Heat + electricity release</td><td><span class="tag-exo">Exothermic</span></td><td>Eclipse, temperature drop, or voltage signal</td><td>Powers base, warms habitat during eclipse</td><td>NASA RTG thermoelectrics</td></tr>
+      <tr><td>CO₂ catalytic breakdown</td><td><span class="tag-exo">Exothermic</span></td><td>High temp + Auralium surface contact</td><td>Accelerates greenhouse gas removal</td><td>Mo/W industrial catalysts (ACS)</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<div class="divider"></div>
+
+<!-- ECLIPSE -->
+<section id="eclipse">
+  <div class="section-label">Section 06</div>
+  <h2>Electricity & Eclipse — 13-Day Power Strategy</h2>
+
+  <div class="sim-panel" style="margin-top:1rem">
+    <div style="font-size:13px;color:var(--k-gold);margin-bottom:1rem;font-weight:500">Eclipse Power Simulator</div>
+    <div class="sim-row">
+      <span class="sim-label">Eclipse day (1–13)</span>
+      <input type="range" class="sim-slider" min="1" max="13" value="1" step="1" id="eclipseday">
+      <span class="sim-val" id="eclipsedayval">Day 1</span>
+    </div>
+    <div class="sim-row">
+      <span class="sim-label">Auralium charge (%)</span>
+      <input type="range" class="sim-slider" min="0" max="100" value="100" step="1" id="aucharge">
+      <span class="sim-val" id="auval">100%</span>
+    </div>
+    <div class="sim-output" id="eclipseout">
+      <span class="sim-stat"><span class="sim-stat-val" id="primary-src">Auralium</span><span class="sim-stat-lbl">Primary source</span></span>
+      <span class="sim-stat"><span class="sim-stat-val" id="backup-src">Geothermal</span><span class="sim-stat-lbl">Backup source</span></span>
+      <span class="sim-stat"><span class="sim-stat-val" id="power-status">Stable</span><span class="sim-stat-lbl">Power status</span></span>
+      <div class="sim-warn ok" id="eclipsewarn">Auralium banks at full charge. All systems nominal.</div>
+    </div>
+  </div>
+
+  <h3>Waste Product Management</h3>
+  <table class="dash-table" style="margin-top:0.5rem">
+    <thead><tr><th>Power Source</th><th>Waste Product</th><th>Management Method</th><th>Secondary Use</th></tr></thead>
+    <tbody>
+      <tr><td>Auralium thermal discharge</td><td>Excess infrared heat</td><td>Heat exchangers divert thermal energy away from habitats</td><td>Warms agricultural water storage tanks</td></tr>
+      <tr><td>Hydrogen fuel cells</td><td>Water vapour + trace heat</td><td>Condensation recovery units capture vapour as liquid</td><td>Feeds base water supply and irrigation</td></tr>
+      <tr><td>Geothermal turbines</td><td>Mineral brine + H₂S gas</td><td>Brine re-injected underground; H₂S scrubber towers remove gas</td><td>Minerals extracted from brine before re-injection</td></tr>
+      <tr><td>Ammonia cracking</td><td>Trace unconverted NH₃</td><td>Ammonia scrubber dissolves remaining NH₃ in water filter</td><td>Ammonium solution used as nitrogen-rich fertiliser</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<div class="divider"></div>
+
+<!-- ASTRONOMY -->
+<section id="astronomy">
+  <div class="section-label">Section 07</div>
+  <h2>Astronomy & Kairos-Developed Technologies</h2>
+  <p style="color:var(--k-muted);font-size:14px;margin-bottom:1.5rem">Kairos is self-sufficient. All systems below are developed and operated on-planet.</p>
+
+  <table class="dash-table">
+    <thead><tr><th>Function</th><th>Earth Analog</th><th>Kairos Version</th><th>How It Works</th></tr></thead>
+    <tbody>
+      <tr><td>Surface temperature mapping</td><td>Thermal IR orbiters (THEMIS)</td><td>Kairos Thermal Orbit Rings (KTOR)</td><td>Ring of small satellites in low orbit — maps gas levels, temps, and storm patterns continuously</td></tr>
+      <tr><td>Navigation</td><td>GPS satellite network</td><td>Auralium Beacon Grid</td><td>Ground towers emit unique pulsed signals — receivers triangulate position from multiple towers</td></tr>
+      <tr><td>Interior mapping</td><td>NASA InSight seismometer</td><td>Deep-ground Seismic Array</td><td>Grid of vibration sensors buried underground — maps aquifer locations and tectonic activity</td></tr>
+      <tr><td>Surface exploration</td><td>Mars Perseverance rover</td><td>Kairos Ceramic Shell Crawler (CSC)</td><td>Rover with ceramic composite body, sealed internal nitrogen, rated to 300°C surface operations</td></tr>
+      <tr><td>Aerial survey</td><td>UAV / aerial drone</td><td>High-pressure Atmospheric Glider</td><td>Engineless glider shaped to ride Kairos's dense high-pressure atmosphere — modelled on deep-ocean pressure gliders</td></tr>
+      <tr><td>Drilling</td><td>Standard soil drill</td><td>Thermal Borehole Probe</td><td>Self-heating drill tip uses Auralium-stored energy to melt through compacted hot soil layers</td></tr>
+      <tr><td>Planetary communication</td><td>Satellite internet</td><td>Auralium Resonance Network (ARN)</td><td>Auralium towers emit resonance signals bouncing along the ionosphere — full-planet coverage without satellites</td></tr>
+      <tr><td>Underground cabling</td><td>Undersea fibre cables</td><td>Buried Thermal Fibre Lines</td><td>Fibre optic in Auralium-alloy shielding, buried below surface — protected from 210°C heat and O₂ corrosion</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<div class="divider"></div>
+
+<!-- ECOLOGY -->
+<section id="ecology">
+  <div class="section-label">Section 08</div>
+  <h2>Ecology — Sustaining Life on Kairos</h2>
+
+  <h3>Biotic & Abiotic Components</h3>
+  <table class="dash-table">
+    <thead><tr><th>Component</th><th>Type</th><th>Required For</th><th>Present on Kairos?</th></tr></thead>
+    <tbody>
+      <tr><td>Liquid water</td><td>Abiotic</td><td>All biological processes</td><td><span class="badge badge-med">Yes — aquifers</span></td></tr>
+      <tr><td>Stable temperature</td><td>Abiotic</td><td>Cell function below ~120°C for most life</td><td><span class="badge badge-critical">No — 210°C now</span></td></tr>
+      <tr><td>Breathable atmosphere</td><td>Abiotic</td><td>Respiration</td><td><span class="badge badge-high">Partial — toxic CO/CO₂</span></td></tr>
+      <tr><td>Earth-like soil</td><td>Abiotic</td><td>Plant root systems, microbial habitat</td><td><span class="badge badge-med">Yes — confirmed</span></td></tr>
+      <tr><td>Sunlight</td><td>Abiotic</td><td>Photosynthesis</td><td><span class="badge badge-high">Yes — except eclipse</span></td></tr>
+      <tr><td>Primary producers</td><td>Biotic</td><td>Base of food chain, O₂ production</td><td><span class="badge badge-critical">No — must introduce</span></td></tr>
+      <tr><td>Decomposers</td><td>Biotic</td><td>Nutrient cycling, soil fertility</td><td><span class="badge badge-critical">No — must engineer</span></td></tr>
+      <tr><td>Nitrogen-fixing bacteria</td><td>Biotic</td><td>Convert N₂ into plant-usable nutrients</td><td><span class="badge badge-critical">No — must introduce</span></td></tr>
+    </tbody>
+  </table>
+
+  <h3>Food Web Introduction Sequence</h3>
+  <div class="food-web">
+    <div class="fw-stage"><div class="fw-stage-num">Stage 1</div><div class="fw-stage-name">Microbes</div><div class="fw-stage-ex">Cyanobacteria, archaea, thermophilic fungi</div></div>
+    <div class="fw-stage"><div class="fw-stage-num">Stage 2</div><div class="fw-stage-name">Soil bacteria</div><div class="fw-stage-ex">Nitrogen-fixing Rhizobium, soil microbes</div></div>
+    <div class="fw-stage"><div class="fw-stage-num">Stage 3</div><div class="fw-stage-name">Plants</div><div class="fw-stage-ex">Mosses, engineered grasses, algae</div></div>
+    <div class="fw-stage"><div class="fw-stage-num">Stage 4</div><div class="fw-stage-name">Insects</div><div class="fw-stage-ex">Beetles, earthworms — pollination and soil aeration</div></div>
+    <div class="fw-stage"><div class="fw-stage-num">Stage 5</div><div class="fw-stage-name">Herbivores</div><div class="fw-stage-ex">Small plant-eating animals — begin animal chain</div></div>
+    <div class="fw-stage"><div class="fw-stage-num">Stage 6</div><div class="fw-stage-name">Predators</div><div class="fw-stage-ex">Omnivores and predators — balance populations</div></div>
+  </div>
+
+  <h3>Nutrient & Chemical Cycles</h3>
+  <div class="card-grid">
+    <div class="card">
+      <div style="font-size:13px;color:var(--k-gold);margin-bottom:0.5rem">Nitrogen Cycle</div>
+      <ul class="bullet-list">
+        <li>NH₃ cracking produces N₂ → enters atmosphere</li>
+        <li>Rhizobium bacteria fix N₂ back into soil ammonia compounds</li>
+        <li>Plants absorb compounds through roots to grow</li>
+        <li>Decomposers return nitrogen to soil on organism death</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div style="font-size:13px;color:var(--k-gold);margin-bottom:0.5rem">Carbon Cycle</div>
+      <ul class="bullet-list">
+        <li>CO₂ absorbed by cyanobacteria and plants during photosynthesis</li>
+        <li>Carbon stored in plant tissue while alive</li>
+        <li>Death → decomposition → carbon returns to soil as organic matter</li>
+        <li>Excess CO₂ permanently removed via basalt injection</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div style="font-size:13px;color:var(--k-gold);margin-bottom:0.5rem">Water Cycle</div>
+      <ul class="bullet-list">
+        <li>Aquifer water extracted, treated, and distributed to surface</li>
+        <li>Plants release vapour through transpiration</li>
+        <li>As planet cools, vapour condenses and falls as rain</li>
+        <li>Surface water seeps back down to recharge aquifers</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div style="font-size:13px;color:var(--k-gold);margin-bottom:0.5rem">Biological Waste</div>
+      <ul class="bullet-list">
+        <li>Anaerobic digesters break down waste → biogas fuel + fertiliser slurry</li>
+        <li>Dead plant matter composted in sealed bins → soil nutrients</li>
+        <li>Excess biological CO₂ monitored — DAC activates if levels rise</li>
+        <li>Geothermal brine re-injected underground after mineral extraction</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- STEM ROLE -->
+<section id="stem">
+  <div class="section-label">Section 09</div>
+  <h2>STEM Occupation — Biogeochemical Engineer</h2>
+
+  <div class="job-card">
+    <div class="job-title">Biogeochemical Engineer</div>
+    <div class="job-sub">Manages how carbon, nitrogen, water, and phosphorus move through all living and non-living systems on Kairos — atmosphere, soil, water, and organisms.</div>
+    <div class="duty-grid">
+      <div class="duty"><div class="duty-area">Atmosphere</div><div class="duty-desc">Monitor CO, CO₂, O₂, N₂ daily and adjust sequestration machine rates based on readings</div></div>
+      <div class="duty"><div class="duty-area">Soil health</div><div class="duty-desc">Test nitrogen, phosphorus, potassium levels and design nutrient return schedules for agriculture</div></div>
+      <div class="duty"><div class="duty-area">Water chemistry</div><div class="duty-desc">Test aquifer water for minerals, acidity, and biological contaminants before distribution</div></div>
+      <div class="duty"><div class="duty-area">Waste systems</div><div class="duty-desc">Operate anaerobic digesters, test biogas output, ensure fertiliser slurry is safe before field use</div></div>
+      <div class="duty"><div class="duty-area">Ecology</div><div class="duty-desc">Design staged organism introduction sequence and monitor populations for balance</div></div>
+      <div class="duty"><div class="duty-area">Eclipse prep</div><div class="duty-desc">Calculate photosynthesis impact and manage bioreactor lighting during 13-day dark period</div></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  Kairos Planetary Research Document · Built for Vercel deployment · All scientific references available in full document
+</footer>
+
+<script>
+const co2r=document.getElementById('co2removed');
+const alb=document.getElementById('albedo');
+const yrs=document.getElementById('years');
+co2r.addEventListener('input',updateSim);
+alb.addEventListener('input',updateSim);
+yrs.addEventListener('input',updateSim);
+function updateSim(){
+  document.getElementById('co2val').textContent=co2r.value+'%';
+  document.getElementById('albedoval').textContent=alb.value+'%';
+  document.getElementById('yearsval').textContent=yrs.value+' yrs';
+  const baseTemp=210;
+  const co2drop=(co2r.value/25)*90;
+  const albDrop=(alb.value/100)*30;
+  const timeDrop=(yrs.value/50)*20;
+  const temp=Math.round(baseTemp-co2drop-albDrop-timeDrop);
+  const co2rem=Math.round(25-parseFloat(co2r.value));
+  document.getElementById('tempout').textContent=temp+'°C';
+  document.getElementById('co2out').textContent=co2rem+'%';
+  const warn=document.getElementById('simwarn');
+  const stat=document.getElementById('statusout');
+  if(temp>150){stat.textContent='Uninhabitable';warn.className='sim-warn danger';warn.textContent='Surface remains uninhabitable. Continue CO₂ sequestration and albedo work.';}
+  else if(temp>80){stat.textContent='Microbes only';warn.className='sim-warn warn';warn.textContent='Thermophilic microbes can now survive. Begin bioreactor deployment.';}
+  else if(temp>40){stat.textContent='Early life';warn.className='sim-warn warn';warn.textContent='Mosses and engineered plants can survive. Stage 3 ecology introduction possible.';}
+  else{stat.textContent='Habitable';warn.className='sim-warn ok';warn.textContent='Surface approaching habitable range. Agriculture and open ecosystem deployment viable.';}
+}
+const eday=document.getElementById('eclipseday');
+const auch=document.getElementById('aucharge');
+eday.addEventListener('input',updateEclipse);
+auch.addEventListener('input',updateEclipse);
+function updateEclipse(){
+  document.getElementById('eclipsedayval').textContent='Day '+eday.value;
+  document.getElementById('auval').textContent=auch.value+'%';
+  const day=parseInt(eday.value);
+  const charge=parseInt(auch.value);
+  const w=document.getElementById('eclipsewarn');
+  const ps=document.getElementById('primary-src');
+  const bs=document.getElementById('backup-src');
+  const pst=document.getElementById('power-status');
+  if(charge>60&&day<=5){ps.textContent='Auralium';bs.textContent='Geothermal';pst.textContent='Stable';w.className='sim-warn ok';w.textContent='Auralium banks healthy. Primary discharge running, geothermal on standby.';}
+  else if((charge>30&&day<=10)||(charge>60&&day<=10)){ps.textContent='Geothermal';bs.textContent='H₂ Fuel Cells';pst.textContent='Stable';w.className='sim-warn ok';w.textContent='Geothermal baseload active. Hydrogen fuel cells on standby for surge demand.';}
+  else if(day>10||charge<30){ps.textContent='H₂ Fuel Cells';bs.textContent='Auralium reserve';pst.textContent='Monitor';w.className='sim-warn warn';w.textContent='Late eclipse stage. Hydrogen fuel cells primary. Monitor Auralium reserve discharge rate.';}
+  if(charge<15){pst.textContent='Critical';w.className='sim-warn danger';w.textContent='Auralium charge critically low. Switch all non-essential systems offline immediately.';}
+}
+const links=document.querySelectorAll('.nav-links a');
+links.forEach(l=>{l.addEventListener('click',function(){links.forEach(x=>x.classList.remove('active'));this.classList.add('active');})});
+</script>
